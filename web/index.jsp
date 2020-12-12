@@ -54,4 +54,12 @@ Te vragen aan mvr:
 update => nog serverside validatie (errors)
 
 css => update niet
+
+
+nog:
+-testklasses => meer => zie deelopdrachten
+-server-side validatie bij zoek
+-sessions deelopdracht 9 toevoegen => (
+
+(zie toledo ingediend => feedback!!! + cursusblok korte notitie gesprek mevrouw)
 -->

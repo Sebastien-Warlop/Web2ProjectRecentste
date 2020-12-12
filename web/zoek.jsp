@@ -42,6 +42,10 @@
     </form>
 </main>
 
+<p>
+    Druk hier om het logboek van de zoekresultaten te zien: <a href="BoekInfo?command=logboek"></a>
+</p>
+
 <footer class="footerOverzicht">
     <p>Sebastien Warlop - Webontwikkeling 2 - 2020-2021</p>
 </footer>

@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -52,6 +53,9 @@ public class Servlet extends javax.servlet.http.HttpServlet {
             case "zoek":
                 destination = zoek(request, response);
                 break;
+            case "logboek":
+                destination = "logboek.jsp";
+                break;
             case "update":
                 destination = update(request, response);
                 break;
@@ -90,9 +94,24 @@ public class Servlet extends javax.servlet.http.HttpServlet {
             }else {
                 destination = "gevonden.jsp";
                 request.setAttribute("boek", boek);
+
+
+                //sessie logboek zoekgeschiedenis
+                HttpSession session =  request.getSession();
+                ArrayList<Boek> zoekGeschiedenis = (ArrayList<Boek>) session.getAttribute("zoekGeschiedenis");
+
+                if (zoekGeschiedenis == null) {
+                    zoekGeschiedenis = new ArrayList<>();
+                    session.setAttribute("zoekGeschiedenis", zoekGeschiedenis);
+                } try {
+                    zoekGeschiedenis.add(boek);
+                } catch (IllegalArgumentException exc) {
+                    request.setAttribute("error", "geen boek gevonden");
+                }
             }
         }
         return destination;
+
     }
 
     private String delete(HttpServletRequest request, HttpServletResponse response) {
@@ -184,12 +203,13 @@ public class Servlet extends javax.servlet.http.HttpServlet {
 
         List<Boek> boeken = boekDB.vindAlle();
         String sorteerKey = "";
-        if (c != null)
-            sorteerKey = c.getValue();
 
         String categorie = request.getParameter("categorie");
         if (categorie != null)
             sorteerKey = categorie;
+        else if (c != null)
+            sorteerKey = c.getValue();
+
 
         switch (sorteerKey) {
             case "Titel":
@@ -271,7 +291,7 @@ public class Servlet extends javax.servlet.http.HttpServlet {
         return "update.jsp";
     }
 
-    private String updateBevestig(HttpServletRequest request, HttpServletResponse response) {
+    private String updateBevestig(HttpServletRequest request, HttpServletResponse response) { /*zie screenshot korter met setTitel enz ook voor errors*/
         if (request.getParameter("submit").equals("UPDATE")) {
             String titel = request.getParameter("titel");
             String auteur = request.getParameter("auteur");
